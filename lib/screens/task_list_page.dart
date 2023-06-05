@@ -3,6 +3,7 @@ import 'package:lista_tarefas/models/task.dart';
 import 'package:lista_tarefas/screens/task_create_page.dart';
 import 'package:lista_tarefas/screens/task_edit_page.dart';
 
+// TODO: Change to statefulwidget
 class TaskList extends StatelessWidget {
   TaskList({super.key});
   List<Task> tasks = [];
