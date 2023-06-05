@@ -1,3 +1,3 @@
-# lista_tarefas
+# Todo list 
 
-A new Flutter project.
+A flutter project of a todo list.
