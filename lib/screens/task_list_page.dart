@@ -12,7 +12,7 @@ class TaskList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     int coins = 10;
-    List<Task> tasks = [];
+    List<Task> tasks = [Task(title: "ASDAd", content: "asdasd")];
 
     return Scaffold(
       appBar: AppBar(
@@ -23,7 +23,8 @@ class TaskList extends StatelessWidget {
               child: Text(
                 "$coins",
                 style: const TextStyle(fontSize: 18),
-              ))
+              )),
+          IconButton(onPressed: () {}, icon: const Icon(Icons.add)),
         ],
       ),
       body: Center(
@@ -37,21 +38,22 @@ class TaskList extends StatelessWidget {
                 child: ListView.builder(
                   itemCount: tasks.length,
                   itemBuilder: (context, index) {
-                    return ListView(
-                        children: [ListTile(title: Text(tasks[index].title))]);
+                    return Row(
+                      children: [
+                        Text(tasks[index].title),
+                        IconButton(
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => TaskEdit()));
+                            },
+                            icon: Icon(Icons.edit)),
+                        IconButton(onPressed: () {}, icon: Icon(Icons.delete)),
+                      ],
+                    );
                   },
                 ),
-              ),
-              const Text("Ok"),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => TaskEdit()),
-                  );
-                },
-                child: const Padding(
-                    padding: EdgeInsets.all(80), child: Text("Clique")),
               ),
               ElevatedButton(
                 style: ButtonStyle(
@@ -77,17 +79,6 @@ class TaskList extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class TaskRowWidget extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Row(children: [
-        // CheckboxListTile(value: value, onChanged: onChanged),
-      ]),
     );
   }
 }
