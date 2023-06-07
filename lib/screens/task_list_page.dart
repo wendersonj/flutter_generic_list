@@ -4,28 +4,46 @@ import 'package:lista_tarefas/screens/task_create_page.dart';
 import 'package:lista_tarefas/screens/task_edit_page.dart';
 
 // TODO: Change to statefulwidget
-class TaskList extends StatelessWidget {
+class TaskList extends StatefulWidget {
   TaskList({super.key});
-  List<Task> tasks = [];
 
   TextEditingController texteditor = TextEditingController();
+  int coins = 1;
+  List<Task> tasks = [Task(title: "ASDAd", content: "asdasd")];
 
   @override
-  Widget build(BuildContext context) {
-    int coins = 10;
-    List<Task> tasks = [Task(title: "ASDAd", content: "asdasd")];
+  State<StatefulWidget> createState() => _TaskListState();
+}
 
+class _TaskListState extends State<TaskList> {
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Task List"),
+        title: Text("TaskList"),
         actions: [
-          Padding(
-              padding: const EdgeInsets.all(5),
-              child: Text(
-                "$coins",
-                style: const TextStyle(fontSize: 18),
-              )),
-          IconButton(onPressed: () {}, icon: const Icon(Icons.add)),
+          IconButton(
+              onPressed: () async {
+                if (!haveCoins(widget.coins)) {
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    content: Text(
+                        "You don't have enough coins! Complete some tasks."),
+                  ));
+                } else {
+                  Task newTask = await Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => CreateTask()));
+
+                  setState(() {
+                    widget.tasks.add(newTask);
+                    widget.coins--;
+                  });
+
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content:
+                          Text("New task added ! Coins: ${widget.coins}")));
+                }
+              },
+              icon: const Icon(Icons.add))
         ],
       ),
       body: Center(
@@ -37,49 +55,48 @@ class TaskList extends StatelessWidget {
               SizedBox(
                 height: 300,
                 child: ListView.builder(
-                  itemCount: tasks.length,
+                  itemCount: widget.tasks.length,
                   itemBuilder: (context, index) {
                     return Row(
                       children: [
-                        Text(tasks[index].title),
+                        Text(widget.tasks[index].title),
                         IconButton(
                             onPressed: () {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => TaskEdit()));
+                                      builder: (context) =>
+                                          TaskEdit(task: widget.tasks[index])));
                             },
                             icon: Icon(Icons.edit)),
-                        IconButton(onPressed: () {}, icon: Icon(Icons.delete)),
+                        IconButton(
+                            onPressed: () {
+                              setState(() {
+                                widget.tasks.remove(widget.tasks[index]);
+                                widget.coins++;
+                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                    content: Text(
+                                        "Task deleted. Coins: ${widget.coins}")));
+                              });
+                            },
+                            icon: Icon(Icons.delete)),
                       ],
                     );
                   },
                 ),
               ),
-              ElevatedButton(
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.black),
-                ),
-                child: const Icon(
-                  Icons.add,
-                  size: 24,
-                  color: Colors.blue,
-                ),
-                onPressed: () async {
-                  Task newTask = await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => CreateTask(),
-                      ));
-                  print("Voltou !");
-                  print(newTask);
-                  tasks.add(newTask);
-                },
-              )
             ],
           ),
         ),
       ),
     );
+  }
+}
+
+bool haveCoins(int coins) {
+  if (coins > 0) {
+    return true;
+  } else {
+    return false;
   }
 }
