@@ -1,22 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:lista_tarefas/models/task.dart';
 
 class TaskEdit extends StatelessWidget {
-  TaskEdit({super.key, this.valor});
-
-  String? valor;
+  Task task;
+  TaskEdit({super.key, required this.task});
 
   @override
   Widget build(BuildContext context) {
-    int coins = 10;
+    Task task = this.task;
+    print(task);
     return Scaffold(
         appBar: AppBar(
-          title: Row(
-            children: [
-              Text("TaskList"),
-              Padding(padding: EdgeInsets.all(80), child: Text("$coins"))
-            ],
-          ),
+          title: Text("TaskList"),
         ),
-        body: Center(child: Text("Edit")));
+        body: Center(child: Text("")));
   }
 }
