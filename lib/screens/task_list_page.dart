@@ -8,7 +8,7 @@ class TaskList extends StatefulWidget {
   TaskList({super.key});
 
   TextEditingController texteditor = TextEditingController();
-  int coins = 1;
+  int coins = 10;
   List<Task> tasks = [Task(title: "ASDAd", content: "asdasd")];
 
   @override
@@ -52,8 +52,9 @@ class _TaskListState extends State<TaskList> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(
-                height: 300,
+              Text("Coins: ${widget.coins}"),
+              Expanded(
+                flex: 1,
                 child: ListView.builder(
                   itemCount: widget.tasks.length,
                   itemBuilder: (context, index) {
@@ -61,12 +62,15 @@ class _TaskListState extends State<TaskList> {
                       children: [
                         Text(widget.tasks[index].title),
                         IconButton(
-                            onPressed: () {
-                              Navigator.push(
+                            onPressed: () async {
+                              Task editedTask = await Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
                                           TaskEdit(task: widget.tasks[index])));
+                              setState(() {
+                                widget.tasks[index] = editedTask;
+                              });
                             },
                             icon: Icon(Icons.edit)),
                         IconButton(
