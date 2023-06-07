@@ -45,7 +45,7 @@ class CreateTask extends StatelessWidget {
                     onPressed: () {
                       titleCtrl.clear();
                       contentCtrl.clear();
-                      print("deleted");
+                      print("cleared");
                     },
                   )
                 ],
